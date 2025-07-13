@@ -2,7 +2,13 @@ export async function POST(req: Request) {
     try {
         const { text } = await req.json();
 
-        const res = await fetch("http://127.0.0.1:8000/predict", {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+        if (!apiUrl) {
+            return new Response(JSON.stringify({ error: "API URL is not set" }), { status: 500 });
+        }
+
+        const res = await fetch(`${apiUrl}/predict`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text }),
@@ -17,7 +23,8 @@ export async function POST(req: Request) {
             headers: { "Content-Type": "application/json" },
             status: 200,
         });
-    } catch {
+    } catch (error) {
+        console.error("Error:", error);
         return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
     }
 }
