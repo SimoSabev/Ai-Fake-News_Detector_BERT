@@ -2,13 +2,7 @@ export async function POST(req: Request) {
     try {
         const { text } = await req.json();
 
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-        if (!apiUrl) {
-            return new Response(JSON.stringify({ error: "API URL is not set" }), { status: 500 });
-        }
-
-        const res = await fetch(`${apiUrl}/predict`, {
+        const res = await fetch("https://r8h5wxrr-8000.euw.devtunnels.ms/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text }),
@@ -23,8 +17,7 @@ export async function POST(req: Request) {
             headers: { "Content-Type": "application/json" },
             status: 200,
         });
-    } catch (error) {
-        console.error("Error:", error);
+    } catch {
         return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
     }
 }
